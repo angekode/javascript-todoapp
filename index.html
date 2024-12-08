@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <title>Todo App</title>
+    </head>
+    <body>
+
+        <h1>Saisie</h1>
+        <input type="text">
+        <button onclick="addTask()">Ajouter</button>
+        <button onclick="removeTask()">Supprimer</button>
+
+        <h1>Liste</h1>
+        <ol id="list"></ol>
+        
+        <script>
+            // Evènements
+
+            const inputElement = document.querySelector("input");
+            inputElement.addEventListener("keyup", function(event) {
+                console.log("Event");
+                if (event.key === "Enter") {
+                    addTask();
+                }
+            })
+
+            
+            // Fonctions
+
+            function addTask() {
+                const listElement = document.querySelector("ol#list");
+                const userInput = document.querySelector("input");
+                if (listElement != null && userInput != null) {
+                    const newItem = document.createElement("li");
+                    newItem.innerHTML = userInput.value;
+                    listElement.appendChild(newItem);
+                }
+            }
+
+            function removeTask() {
+
+                const listElement = document.querySelector("ol#list");
+                if (listElement == null) {
+                    console.log("ol#list inexistant");
+                    return;
+                }
+
+                const userInput = document.querySelector("input");
+                const position = parseInt(userInput.value) - 1;
+                if (isNaN(position) || position < 0 || position >= listElement.children.length) {
+                    console.log("La tâche suivante est invalide: " + userInput.value);
+                    return;
+                }
+
+                if (listElement.children != null) {
+                    listElement.children.item(position).remove();
+                }
+            }
+        </script>
+    </body>
+</html>
