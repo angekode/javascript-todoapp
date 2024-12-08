@@ -45,6 +45,12 @@
                 background-color: rgb(230, 183, 122);
             }
 
+            #message {
+                font-size: smaller;
+                font-style: italic;
+                color:dimgray;
+            }
+
             .app-row {
                 margin: 20px;
             }
@@ -67,6 +73,9 @@
                 <button onclick="removeTask()">Supprimer</button>
             </div>
             <div class="app-row">
+                <p id="message"></p>
+            </div>
+            <div class="app-row">
                 <h1>Liste</h1>
             </div>
             <div class="app-row">
@@ -82,6 +91,11 @@
                 console.log("Event");
                 if (event.key === "Enter") {
                     addTask();
+                    inputElement.value = "";
+                }
+                const messageElement = document.getElementById("message");
+                if (message != null) {
+                    message.innerHTML = "";
                 }
             })
 
@@ -110,6 +124,10 @@
                 const position = parseInt(userInput.value) - 1;
                 if (isNaN(position) || position < 0 || position >= listElement.children.length) {
                     console.log("La tâche suivante est invalide: " + userInput.value);
+                    const messageElement = document.getElementById("message");
+                    if (message != null) {
+                        message.innerHTML = "La tâche suivante est invalide: " + userInput.value;
+                    }
                     return;
                 }
 
