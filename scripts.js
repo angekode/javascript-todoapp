@@ -1,17 +1,37 @@
+
+
 // Evènements
 
-const inputElement = document.querySelector("input");
-inputElement.addEventListener("keyup", function(event) {
-    console.log("Event");
-    if (event.key === "Enter") {
-        addTask();
-        inputElement.value = "";
-    }
-    const messageElement = document.getElementById("message");
-    if (message != null) {
-        message.innerHTML = "";
-    }
-})
+const userInput = document.getElementById("user_input");
+if (userInput == null) {
+    console.log("Champ de saisie manquant");
+} else {
+    userInput.addEventListener("keyup", (event) => {
+        console.log("Event");
+        if (event.key === "Enter") {
+            addTask();
+            userInput.value = "";
+        }
+        const messageElement = document.getElementById("message");
+        if (messageElement != null) {
+            messageElement.innerHTML = "";
+        }
+    });
+}
+
+const buttonAdd = document.getElementById("button_add");
+if (buttonAdd == null) {
+    console.log("Bouton ajouter manquant");
+} else {
+    buttonAdd.addEventListener("click",() => { addTask() });
+}
+
+const buttonRemove = document.getElementById("button_remove");
+if (buttonRemove == null) {
+    console.log("Bouton ajouter manquant");
+} else {
+    buttonRemove.addEventListener("click",() => { removeCheckedTasks() });
+}
 
 
 // Fonctions

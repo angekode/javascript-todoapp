@@ -1,5 +1,6 @@
 <html>
     <head>
+        <meta charset="UTF-8">
         <title>Todo App</title>
         <link href="styles.css" rel="stylesheet" />
     </head>
@@ -10,9 +11,9 @@
                 <h1>Saisie</h1>
             </div>
             <div class="app-row">
-                <input type="text" placeholder="Tache / Numéro">
-                <button onclick="addTask()">Ajouter</button>
-                <button onclick="removeCheckedTasks()">Supprimer</button>
+                <input type="text" id="user_input" placeholder="Description Tache">
+                <button id="button_add">Ajouter</button>
+                <button id="button_remove">Supprimer</button>
             </div>
             <div class="app-row">
                 <p id="message"></p>
