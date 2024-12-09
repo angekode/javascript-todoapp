@@ -57,6 +57,12 @@ function addTask() {
         newLabelElement.setAttribute("for",lastId); // permet d'agir sur la checkbox quand on clique sur le texte
         newLabelElement.innerText = userInput.value;
         newLiElement.appendChild(newLabelElement);
+
+        const newCrossElement = document.createElement("img");
+        newCrossElement.setAttribute("src","cross.svg");
+        newCrossElement.setAttribute("class","img_cross");
+        newCrossElement.addEventListener("click",() => { newLiElement.remove(); });
+        newLiElement.appendChild(newCrossElement);
     }
 }
 
