@@ -55,6 +55,19 @@ h1  {
     color:rgb(6, 41, 41);
 }
 
-.img_cross {
-    margin-left: 15px;
+.img_cross, 
+.img_up_arrow, 
+.img_down_arrow {
+    margin: 0px 5px;
+}
+
+.img_cross:hover, 
+.img_up_arrow:hover, 
+.img_down_arrow:hover {
+    background-color: black;
+    cursor: pointer;
+}
+
+ul {
+    list-style-type: none;
 }

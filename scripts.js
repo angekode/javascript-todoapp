@@ -126,6 +126,16 @@ function addTask() {
     newCrossElement.setAttribute("class","img_cross");
     newCrossElement.addEventListener("click",() => { onCrossClicked(newLiElement); });
     newLiElement.appendChild(newCrossElement);
+
+    const upArrowElement = document.createElement("img");
+    upArrowElement.setAttribute("src","up_arrow.svg");
+    upArrowElement.setAttribute("class","img_up_arrow");
+    newLiElement.appendChild(upArrowElement);
+
+    const downArrowElement = document.createElement("img");
+    downArrowElement.setAttribute("src","down_arrow.svg");
+    downArrowElement.setAttribute("class","img_down_arrow");
+    newLiElement.appendChild(downArrowElement);
 }
 
 function removeCheckedTasks() {
