@@ -104,6 +104,8 @@ function onDownArrowClicked(taskId) {
 
 // taksList : Array<task_new()>
 let tasksList = [];
+loadTasksList();
+updateList();
 
 // text : string (texte de la tâche)
 // checked : boolean (tâche cochée ou pas)
@@ -112,6 +114,28 @@ function task_new(text,checked) {
         text : text,
         isChecked : checked
     };
+}
+
+function saveTasksList() {
+    try {
+        localStorage.setItem("tasksList",JSON.stringify(tasksList));
+    } catch (err) {
+        console.log("saveTasksList(): impossible d'utiliser le localStorage");
+    }
+}
+
+function loadTasksList() {
+    const tasksListjsonString = localStorage.getItem("tasksList");
+    if (tasksListjsonString == null) {
+        console.log("loadTasksList(): impossible de charger à partir de localStorage" );
+        return;
+    }
+    const loadedTasksObject = JSON.parse(tasksListjsonString);
+    if (loadedTasksObject == null) {
+        console.log("loadTasksList(): format de liste dans le localStorage invalide");
+        return;
+    }
+    tasksList = loadedTasksObject;
 }
 
 function addTaskFromUserInput() {
@@ -197,4 +221,6 @@ function updateList() {
 
         id++;
     });
+
+    saveTasksList();
 }
