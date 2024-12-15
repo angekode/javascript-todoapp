@@ -1,46 +1,59 @@
-// Evènements
+// Actions au chargement
 // -------------------------------------------------------------------------------------
 
-// Touche "Entrée" => ajout d'une tâche à partir de user_input
-const userInput = document.getElementById("user_input");
-if (userInput == null) {
-    console.log("Champ de saisie manquant");
-} else {
-    userInput.addEventListener("keyup", (event) => {
-        console.log("Event");
-        if (event.key === "Enter") {
+// taksList : Array<task_new()>
+let tasksList = [];
+
+window.addEventListener("load",() => {
+
+    // Touche "Entrée" => ajout d'une tâche à partir de user_input
+    const userInput = document.getElementById("user_input");
+    if (userInput == null) {
+        console.log("Champ de saisie manquant");
+    } else {
+        userInput.addEventListener("keyup", (event) => {
+            console.log("Event");
+            if (event.key === "Enter") {
+                addTaskFromUserInput();
+                userInput.value = "";
+            }
+            const messageElement = document.getElementById("message");
+            if (messageElement != null) {
+                messageElement.innerHTML = "";
+            }
+        });
+    }
+
+    // Clic sur le bouton "Ajouter" => ajout d'une tâche à partir de user_input
+    const buttonAdd = document.getElementById("button_add");
+    if (buttonAdd == null) {
+        console.log("Bouton ajouter manquant");
+    } else {
+        buttonAdd.addEventListener("click",() => { 
             addTaskFromUserInput();
             userInput.value = "";
-        }
-        const messageElement = document.getElementById("message");
-        if (messageElement != null) {
-            messageElement.innerHTML = "";
-        }
-    });
-}
+        });
+    }
 
-// Clic sur le bouton "Ajouter" => ajout d'une tâche à partir de user_input
-const buttonAdd = document.getElementById("button_add");
-if (buttonAdd == null) {
-    console.log("Bouton ajouter manquant");
-} else {
-    buttonAdd.addEventListener("click",() => { 
-        addTaskFromUserInput();
-        userInput.value = "";
-    });
-}
+    // Clic sur le bouton "Supprimer" => suppression des tâches sélectionnées
+    const buttonRemove = document.getElementById("button_remove");
+    if (buttonRemove == null) {
+        console.log("Bouton ajouter manquant");
+    } else {
+        buttonRemove.addEventListener("click",() => {
+            if (confirm("Supprimer la ou les tâches sélectionnées ?")) {
+                removeCheckedTasks();
+            }
+        });
+    }
 
-// Clic sur le bouton "Supprimer" => suppression des tâches sélectionnées
-const buttonRemove = document.getElementById("button_remove");
-if (buttonRemove == null) {
-    console.log("Bouton ajouter manquant");
-} else {
-    buttonRemove.addEventListener("click",() => {
-        if (confirm("Supprimer la ou les tâches sélectionnées ?")) {
-            removeCheckedTasks();
-        }
-    });
-}
+    loadTasksList();
+    updateList();
+});
+
+
+// Mangagers d'évènements
+// -------------------------------------------------------------------------------------
 
 // Clic sur la croix à droite d'une tâche => suppression de la tâche
 // taskId : number (position de la tâche dans "taskList")
@@ -99,17 +112,13 @@ function onDownArrowClicked(taskId) {
     updateList();
 }
 
+
 // Fonctions
 // -------------------------------------------------------------------------------------
 
-// taksList : Array<task_new()>
-let tasksList = [];
-loadTasksList();
-updateList();
-
 // text : string (texte de la tâche)
 // checked : boolean (tâche cochée ou pas)
-function task_new(text,checked) {
+function newTask(text,checked) {
     return {
         text : text,
         isChecked : checked
@@ -145,7 +154,7 @@ function addTaskFromUserInput() {
         return;
     }
 
-    tasksList.push(task_new(userInput.value,false));
+    tasksList.push(newTask(userInput.value,false));
     updateList();    
 }
 
