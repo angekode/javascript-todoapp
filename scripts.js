@@ -9,7 +9,7 @@ if (userInput == null) {
     userInput.addEventListener("keyup", (event) => {
         console.log("Event");
         if (event.key === "Enter") {
-            addTask();
+            addTaskFromUserInput();
             userInput.value = "";
         }
         const messageElement = document.getElementById("message");
@@ -25,7 +25,7 @@ if (buttonAdd == null) {
     console.log("Bouton ajouter manquant");
 } else {
     buttonAdd.addEventListener("click",() => { 
-        addTask();
+        addTaskFromUserInput();
         userInput.value = "";
     });
 }
@@ -43,118 +43,119 @@ if (buttonRemove == null) {
 }
 
 // Clic sur la croix à droite d'une tâche => suppression de la tâche
-// liElement : HTMLLiElement
-function onCrossClicked(liElement) {
-    if (liElement == null) {
-        console.log("onCrossClicked(): liElement null");
-        return;
-    }
+// taskId : number (position de la tâche dans "taskList")
+function onCrossClicked(taskId) {
     if (confirm("Supprimer la tâche ?")) {
-        liElement.remove();
+        removeTask(taskId)
     }
 }
 
 // Clic sur la checkbox à gauche d'une tâche => toogle texte barré
-// liElement : HTMLLiElement
-function onCheckboxClicked(liElement) {
-    if (liElement == null) {
-        console.log("onCheckboxClicked(): liElement null");
+// taskId : number (position de la tâche dans "taskList")
+function onCheckboxClicked(taskId) {
+    if (taskId < 0 || taskId >= tasksList.length) {
+        console.log("onCheckboxClicked(): taskId invalide");
         return;
     }
-    const taskLabelElement = liElement.querySelector("label");
-    if (taskLabelElement == null) {
-        console.log("onCheckboxClicked(): label manquant");
-        return;
-    }
-    if (taskLabelElement.childNodes.lenght < 1) {
-        console.log("onCheckboxClicked(): label vide");
-        return;
-    }
-
-    // simple texte, il n'est pas barré => on barre le texte
-    if (taskLabelElement.childNodes[0].nodeType == 3 /*TEXT_NODE*/) {
-        const crossedTextElement = document.createElement("s");
-        crossedTextElement.innerText = taskLabelElement.innerHTML;
-        taskLabelElement.innerHTML = "";
-        taskLabelElement.appendChild(crossedTextElement);
-
-    // il y a une balise dedans (<s>) => on remplace par du texte simple
-    } else if (taskLabelElement.childNodes[0].nodeType == 1 /* ELEMENT_NODE */) {
-        const crossedTextElement = taskLabelElement.childNodes[0].innerText;
-        taskLabelElement.innerHTML = crossedTextElement;
-    }
+    tasksList[taskId].isChecked = !tasksList[taskId].isChecked;
+    updateList();
 }
 
 
 // Fonctions
 // -------------------------------------------------------------------------------------
 
-var lastId = -1;
+// taksList : Array<task_new()>
+let tasksList = [];
 
-function addTask() {
+// text : string (texte de la tâche)
+// checked : boolean (tâche cochée ou pas)
+function task_new(text,checked) {
+    return {
+        text : text,
+        isChecked : checked
+    };
+}
 
+function addTaskFromUserInput() {
+    const userInput = document.getElementById("user_input");
+    if (userInput == null) {
+        console.log("Champe de saisie manquant");
+        return;
+    }
+
+    tasksList.push(task_new(userInput.value,false));
+    updateList();    
+}
+
+function removeTask(taskId) {
+    tasksList.splice(taskId,1);
+    updateList();
+}
+
+function removeCheckedTasks() {
+    tasksList = tasksList.filter((task) => !task.isChecked)
+    updateList();
+}
+
+// A chaque appel, on efface toute la liste contenue dans le DOM
+// et on recrée à partir de la liste contenue dans la variable globale "taskList"
+function updateList() {
     const listElement = document.getElementById("task_list");
     if (listElement == null) {
         console.log("Liste des tâches manquante");
         return;
     }
 
-    const userInput = document.getElementById("user_input");
-    if (userInput == null) {
-        console.log("Champe de saisie manquant");
-        return;
-    }
-    
-    lastId++;
+    listElement.innerHTML = "";
 
-    const newLiElement = document.createElement("li");
-    listElement.appendChild(newLiElement);
-    
-    const newCheckboxElement = document.createElement("input");
-    newCheckboxElement.setAttribute("id",lastId);
-    newCheckboxElement.setAttribute("type","checkbox");
-    newCheckboxElement.addEventListener("click",() => { onCheckboxClicked(newLiElement); });
-    newLiElement.appendChild(newCheckboxElement);
+    let id = 0;
+    tasksList.forEach((task) => {
+        // Obligé de faire une copie "currentId" de "id" 
+        // avec un scope limité à une itération de la boucle forEach
+        // sinon quand les event listeners sont appellés avec "id" en argument
+        // on dirait que c'est la référence de la variable qui est prise 
+        // et non pas la valeur numérique qu'elle contient au moment de l'appel dans cette boucle.
+        // à creuser...
+        let currentId = id; 
 
-    const newLabelElement = document.createElement("label");
-    newLabelElement.setAttribute("for",lastId); // permet d'agir sur la checkbox quand on clique sur le texte
-    newLabelElement.innerText = userInput.value;
-    newLiElement.appendChild(newLabelElement);
+        const newLiElement = document.createElement("li");
+        listElement.appendChild(newLiElement);
+        
+        const newCheckboxElement = document.createElement("input");
+        newCheckboxElement.setAttribute("id",currentId);
+        newCheckboxElement.setAttribute("type","checkbox");
+        newCheckboxElement.checked = task.isChecked;
+        newCheckboxElement.addEventListener("click",() => { onCheckboxClicked(currentId); });
+        newLiElement.appendChild(newCheckboxElement);
 
-    const newCrossElement = document.createElement("img");
-    newCrossElement.setAttribute("src","cross.svg");
-    newCrossElement.setAttribute("class","img_cross");
-    newCrossElement.addEventListener("click",() => { onCrossClicked(newLiElement); });
-    newLiElement.appendChild(newCrossElement);
-
-    const upArrowElement = document.createElement("img");
-    upArrowElement.setAttribute("src","up_arrow.svg");
-    upArrowElement.setAttribute("class","img_up_arrow");
-    newLiElement.appendChild(upArrowElement);
-
-    const downArrowElement = document.createElement("img");
-    downArrowElement.setAttribute("src","down_arrow.svg");
-    downArrowElement.setAttribute("class","img_down_arrow");
-    newLiElement.appendChild(downArrowElement);
-}
-
-function removeCheckedTasks() {
-
-    const listElement = document.getElementById("task_list");
-    if (listElement == null) {
-        console.log("Liste de tâches manquantes");
-        return;
-    }
-
-    // Si on supprime un child de childNodes, childNodes est modifié,
-    // donc on parcours une copie de childNodes.
-    const listItemsElements = Array.from(listElement.childNodes);
-    listItemsElements.forEach(
-        item => {
-            const checkboxElement = item.querySelector("input");
-            if (checkboxElement != null && checkboxElement.checked) {
-                item.remove();
-            }
+        const newLabelElement = document.createElement("label");
+        newLabelElement.setAttribute("for",currentId); // permet d'agir sur la checkbox quand on clique sur le texte
+        if (task.isChecked) {
+            const crossedElement = document.createElement("s");
+            crossedElement.innerText = task.text;
+            newLabelElement.appendChild(crossedElement);
+        } else {
+            newLabelElement.innerHTML = task.text;
         }
-    );
+        newLiElement.appendChild(newLabelElement);
+
+        const newCrossElement = document.createElement("img");
+        newCrossElement.setAttribute("src","cross.svg");
+        newCrossElement.setAttribute("class","img_cross");
+        newCrossElement.addEventListener("click",() => { onCrossClicked(currentId); });
+        newLiElement.appendChild(newCrossElement);
+
+        const upArrowElement = document.createElement("img");
+        upArrowElement.setAttribute("src","up_arrow.svg");
+        upArrowElement.setAttribute("class","img_up_arrow");
+        newLiElement.appendChild(upArrowElement);
+
+        const downArrowElement = document.createElement("img");
+        downArrowElement.setAttribute("src","down_arrow.svg");
+        downArrowElement.setAttribute("class","img_down_arrow");
+        newLiElement.appendChild(downArrowElement);
+
+        id++;
+    });
 }
