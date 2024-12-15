@@ -64,7 +64,6 @@ h1  {
 .img_cross:hover, 
 .img_up_arrow:hover, 
 .img_down_arrow:hover {
-    background-color: black;
     cursor: pointer;
 }
 

@@ -45,6 +45,10 @@ if (buttonRemove == null) {
 // Clic sur la croix à droite d'une tâche => suppression de la tâche
 // taskId : number (position de la tâche dans "taskList")
 function onCrossClicked(taskId) {
+    if (taskId < 0 || taskId >= tasksList.length) {
+        console.log("onCrossClicked(): taskId invalide");
+        return;
+    }
     if (confirm("Supprimer la tâche ?")) {
         removeTask(taskId)
     }
@@ -61,6 +65,39 @@ function onCheckboxClicked(taskId) {
     updateList();
 }
 
+// taskId : number (position de la tâche dans "taskList")
+function onUpArrowClicked(taskId) {
+    if (taskId < 0 || taskId >= tasksList.length) {
+        console.log("onUpArrowClicked(): taskId invalide");
+        return;
+    }
+    if (taskId == 0) {
+        return;
+    }
+
+    const taskToMoveUp = tasksList[taskId];
+    const taskToMoveDown = tasksList[taskId-1];
+    tasksList[taskId-1] = taskToMoveUp;
+    tasksList[taskId] = taskToMoveDown;
+    updateList();
+}
+
+// taskId : number (position de la tâche dans "taskList")
+function onDownArrowClicked(taskId) {
+    if (taskId < 0 || taskId >= tasksList.length) {
+        console.log("onUpArrowClicked(): taskId invalide");
+        return;
+    }
+    if (taskId == tasksList.length-1) {
+        return;
+    }
+
+    const taskToMoveUp = tasksList[taskId+1];
+    const taskToMoveDown = tasksList[taskId];
+    tasksList[taskId] = taskToMoveUp;
+    tasksList[taskId+1] = taskToMoveDown;
+    updateList();
+}
 
 // Fonctions
 // -------------------------------------------------------------------------------------
@@ -149,11 +186,13 @@ function updateList() {
         const upArrowElement = document.createElement("img");
         upArrowElement.setAttribute("src","up_arrow.svg");
         upArrowElement.setAttribute("class","img_up_arrow");
+        upArrowElement.addEventListener("click", () => {onUpArrowClicked(currentId); });
         newLiElement.appendChild(upArrowElement);
 
         const downArrowElement = document.createElement("img");
         downArrowElement.setAttribute("src","down_arrow.svg");
         downArrowElement.setAttribute("class","img_down_arrow");
+        downArrowElement.addEventListener("click", () => {onDownArrowClicked(currentId); });
         newLiElement.appendChild(downArrowElement);
 
         id++;
