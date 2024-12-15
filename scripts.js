@@ -24,7 +24,10 @@ const buttonAdd = document.getElementById("button_add");
 if (buttonAdd == null) {
     console.log("Bouton ajouter manquant");
 } else {
-    buttonAdd.addEventListener("click",() => { addTask() });
+    buttonAdd.addEventListener("click",() => { 
+        addTask();
+        userInput.value = "";
+    });
 }
 
 // Clic sur le bouton "Supprimer" => suppression des tâches sélectionnées
