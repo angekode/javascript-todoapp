@@ -35,21 +35,53 @@ const buttonRemove = document.getElementById("button_remove");
 if (buttonRemove == null) {
     console.log("Bouton ajouter manquant");
 } else {
-    buttonRemove.addEventListener("click",() => { 
-        if (confirm("Supprimer la tâche?")) {
+    buttonRemove.addEventListener("click",() => {
+        if (confirm("Supprimer la ou les tâches sélectionnées ?")) {
             removeCheckedTasks();
         }
     });
 }
 
 // Clic sur la croix à droite d'une tâche => suppression de la tâche
+// liElement : HTMLLiElement
 function onCrossClicked(liElement) {
     if (liElement == null) {
         console.log("onCrossClicked(): liElement null");
         return;
     }
-    if (confirm("Supprimer la tâche?")) {
+    if (confirm("Supprimer la tâche ?")) {
         liElement.remove();
+    }
+}
+
+// Clic sur la checkbox à gauche d'une tâche => toogle texte barré
+// liElement : HTMLLiElement
+function onCheckboxClicked(liElement) {
+    if (liElement == null) {
+        console.log("onCheckboxClicked(): liElement null");
+        return;
+    }
+    const taskLabelElement = liElement.querySelector("label");
+    if (taskLabelElement == null) {
+        console.log("onCheckboxClicked(): label manquant");
+        return;
+    }
+    if (taskLabelElement.childNodes.lenght < 1) {
+        console.log("onCheckboxClicked(): label vide");
+        return;
+    }
+
+    // simple texte, il n'est pas barré => on barre le texte
+    if (taskLabelElement.childNodes[0].nodeType == 3 /*TEXT_NODE*/) {
+        const crossedTextElement = document.createElement("s");
+        crossedTextElement.innerText = taskLabelElement.innerHTML;
+        taskLabelElement.innerHTML = "";
+        taskLabelElement.appendChild(crossedTextElement);
+
+    // il y a une balise dedans (<s>) => on remplace par du texte simple
+    } else if (taskLabelElement.childNodes[0].nodeType == 1 /* ELEMENT_NODE */) {
+        const crossedTextElement = taskLabelElement.childNodes[0].innerText;
+        taskLabelElement.innerHTML = crossedTextElement;
     }
 }
 
@@ -81,6 +113,7 @@ function addTask() {
     const newCheckboxElement = document.createElement("input");
     newCheckboxElement.setAttribute("id",lastId);
     newCheckboxElement.setAttribute("type","checkbox");
+    newCheckboxElement.addEventListener("click",() => { onCheckboxClicked(newLiElement); });
     newLiElement.appendChild(newCheckboxElement);
 
     const newLabelElement = document.createElement("label");
@@ -91,7 +124,7 @@ function addTask() {
     const newCrossElement = document.createElement("img");
     newCrossElement.setAttribute("src","cross.svg");
     newCrossElement.setAttribute("class","img_cross");
-    newCrossElement.addEventListener("click",() => { onCrossClicked(newLiElement)});
+    newCrossElement.addEventListener("click",() => { onCrossClicked(newLiElement); });
     newLiElement.appendChild(newCrossElement);
 }
 
