@@ -47,8 +47,44 @@ window.addEventListener("load",() => {
         });
     }
 
+    const fileInput = document.getElementById("file_input");
+    if (fileInput == null) {
+        console.log("Bouton de chargement de fichier manquant");
+    } else {
+        fileInput.addEventListener("change",(event) => {
+            const files = event.target.files;
+            if (files != null && files.length > 0) {
+                const reader = new FileReader();
+                reader.readAsText(files[0]);
+                reader.onload = (e) => {
+                    const loadedTasksObject = JSON.parse(reader.result);
+                    if (loadedTasksObject == null) {
+                        console.log("format de fichier invalide");
+                        return;
+                    }
+                    tasksList = loadedTasksObject;
+                    updateDomList();
+                };
+            }
+        });
+    }
+
+    const buttonSave = document.getElementById("button_save");
+    if (buttonSave == null) {
+        console.log("Bouton de sauvegarde manquant");
+    } else {
+        buttonSave.addEventListener("click",() => {
+            const data = new Blob([JSON.stringify(tasksList),{type:"text/json"}]);
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(data);
+            a.download = "todo.json";
+            a.click();
+            URL.revokeObjectURL(a.href);
+        });
+    }
+
     loadTasksList();
-    updateList();
+    updateDomList();
 });
 
 
@@ -63,7 +99,7 @@ function onCrossClicked(taskId) {
         return;
     }
     if (confirm("Supprimer la tâche ?")) {
-        removeTask(taskId)
+        removeTask(taskId);
     }
 }
 
@@ -75,7 +111,7 @@ function onCheckboxClicked(taskId) {
         return;
     }
     tasksList[taskId].isChecked = !tasksList[taskId].isChecked;
-    updateList();
+    updateDomList();
 }
 
 // taskId : number (position de la tâche dans "taskList")
@@ -92,7 +128,7 @@ function onUpArrowClicked(taskId) {
     const taskToMoveDown = tasksList[taskId-1];
     tasksList[taskId-1] = taskToMoveUp;
     tasksList[taskId] = taskToMoveDown;
-    updateList();
+    updateDomList();
 }
 
 // taskId : number (position de la tâche dans "taskList")
@@ -109,7 +145,7 @@ function onDownArrowClicked(taskId) {
     const taskToMoveDown = tasksList[taskId];
     tasksList[taskId] = taskToMoveUp;
     tasksList[taskId+1] = taskToMoveDown;
-    updateList();
+    updateDomList();
 }
 
 
@@ -155,22 +191,22 @@ function addTaskFromUserInput() {
     }
 
     tasksList.push(newTask(userInput.value,false));
-    updateList();    
+    updateDomList();    
 }
 
 function removeTask(taskId) {
     tasksList.splice(taskId,1);
-    updateList();
+    updateDomList();
 }
 
 function removeCheckedTasks() {
-    tasksList = tasksList.filter((task) => !task.isChecked)
-    updateList();
+    tasksList = tasksList.filter((task) => !task.isChecked);
+    updateDomList();
 }
 
 // A chaque appel, on efface toute la liste contenue dans le DOM
 // et on recrée à partir de la liste contenue dans la variable globale "taskList"
-function updateList() {
+function updateDomList() {
     const listElement = document.getElementById("task_list");
     if (listElement == null) {
         console.log("Liste des tâches manquante");
