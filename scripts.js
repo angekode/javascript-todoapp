@@ -74,7 +74,7 @@ window.addEventListener("load",() => {
         console.log("Bouton de sauvegarde manquant");
     } else {
         buttonSave.addEventListener("click",() => {
-            const data = new Blob([JSON.stringify(tasksList),{type:"text/json"}]);
+            const data = new Blob([JSON.stringify(tasksList)],{type:"application/json"});
             const a = document.createElement("a");
             a.href = URL.createObjectURL(data);
             a.download = "todo.json";
