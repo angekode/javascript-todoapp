@@ -235,6 +235,10 @@ function updateDomList() {
         newCheckboxElement.addEventListener("click",() => { onCheckboxClicked(currentId); });
         newLiElement.appendChild(newCheckboxElement);
 
+        const newCustomCheckboxSpan = document.createElement("span");
+        newCustomCheckboxSpan.setAttribute("class","custom_checkbox");
+        newLiElement.appendChild(newCustomCheckboxSpan);
+
         const newLabelElement = document.createElement("label");
         newLabelElement.setAttribute("for",currentId); // permet d'agir sur la checkbox quand on clique sur le texte
         if (task.isChecked) {
