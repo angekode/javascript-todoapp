@@ -1,3 +1,8 @@
+:root {
+    --save-button-width: 150px;
+}
+
+
 *{
     font-family: "Roboto", sans-serif   ;
 }
@@ -17,7 +22,7 @@ body {
     box-shadow: 0 0 8px rgba(0,0,0,0.4);
 }
 
-input {
+input#user_input {
     border: none;
     outline: none;
     padding: 5px;
@@ -109,14 +114,45 @@ input[type="checkbox"]:checked ~ .custom_checkbox {
     background-color: dodgerblue;
 }
 
-label {
+ul#task_list label {
     margin-left: 15px;
     flex-grow: 1; /*prend le maximum de place possible*/
 }
 
-label:hover {
+ul#task_list label:hover {
     cursor: pointer;
 }
 
 
+/* On cache le bouton de base et on rajoute un label #custom_button_load par dessus*/
+input[type="file"] {
+    /* Laisse la place aux autres éléments, 
+       mais reste au dessus pour garder l'interactivité */
+    position: absolute; 
+    width: var(--save-button-width);
+    height: 30px; /* Pour correspondre au boutton custom mais c'est au jugé */
+    opacity: 0;
+}
 
+input[type="file"]:hover ~ #custom_button_load {
+    background-color: rgb(230, 183, 122);
+    cursor: pointer;
+}
+
+/* On affiche un bouton custom au dessus du input caché,
+   il doit faire exactement la même taille */
+#custom_button_load {
+    display: inline-block;
+    background-color: rgb(238, 157, 52);
+     
+    /* 5px pour garder la cohérence avec les autres bouttons */
+    padding: 5px 5px;
+    /* Avec label le padding s'ajoute en plus de width contrairement
+        à input: input.width = label.width + 2 * padding, ici:
+        150 = label.width + 2 * 5 => label.width = 150 - 2*5 = 140 */
+    width: calc(var(--save-button-width) - 2 * 5px);
+    font-size: larger;
+    color: white;
+    border-radius: 20px;
+    text-align: center;
+}
