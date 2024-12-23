@@ -17,7 +17,7 @@
 /* ------- */
 
 *{
-    font-family: "Roboto", sans-serif   ;
+    font-family: "Lato", sans-serif;
 }
 
 body {
@@ -26,6 +26,7 @@ body {
 
 h1  {
     color:rgb(6, 41, 41);
+    font-weight: 1000;
 }
 
 
@@ -38,7 +39,7 @@ h1  {
     padding: 10px;
     border-radius: 20px;
 
-    background: linear-gradient(45deg,rgba(255,255,255),rgb(233, 233, 233));
+    background: linear-gradient(45deg,rgb(248, 248, 248),rgb(238, 234, 228));
     box-shadow: 0 0 8px rgba(0,0,0,0.4);
 }
 
@@ -57,10 +58,14 @@ li.task-row {
     padding: 5px;
     border-radius: 4px;
 
-    box-shadow: 0 0 5px rgba(0,0,0,0.4);  
+    box-shadow: 0 0 4px rgba(0,0,0,0.2);
 
     display: flex; /*les enfants sont placés et dimensionnés avec les attributs flex*/
     align-items: center;    
+}
+
+li.task-row:hover {
+    background-color: white; 
 }
 
 
@@ -76,6 +81,7 @@ li.task-row {
     outline: none;
     
     font-size: var(--button-font-size);
+    font-weight: 700;
     color: white;
 
     cursor: pointer;
@@ -96,7 +102,12 @@ input#user_input {
     outline: none;
     
     font-size: large;
-    font-weight: lighter;
+    font-weight: 600;
+}
+
+input#user_input::placeholder {
+    color: lightgrey;
+    font-weight: 500;
 }
 
 
@@ -137,6 +148,7 @@ input[type="checkbox"]:checked ~ .custom_checkbox {
 ul#task_list label {
     flex-grow: 1; /* prend le maximum de place possible */
     margin-left: 15px;
+    font-weight: 600;
 }
 
 ul#task_list label:hover {

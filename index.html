@@ -3,7 +3,7 @@
         <meta charset="UTF-8">
         <title>Todo App</title>
         <link href="styles.css" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     </head>
     <body>
 
@@ -15,7 +15,7 @@
             <div class="app-row">
                 <input type="text" id="user_input" placeholder="Description Tache">
                 <button class="button-clickable" id="button_add">Ajouter</button>
-                <button class="button-clickable" id="button_remove">Supprimer</button>
+                <button class="button-clickable" id="button_remove" title="Supprime la ou les tâche(s) cochées">Supprimer</button>
             </div>
             <div class="app-row">
                 <h1>Liste</h1>
@@ -23,10 +23,11 @@
             <div class="app-row">
                 <ul class="tasks-list" id="task_list"></ul>
             </div>
-            <input type="file" id="file_input"/>
-            <label class="button-clickable" id="custom_button_load">Charger</label>
-            <button class="button-clickable" id="button_save">Sauvegarder</button>
-            
+            <div class="app-row">
+                <input type="file" id="file_input"/>
+                <label class="button-clickable" id="custom_button_load">Charger</label>
+                <button class="button-clickable" id="button_save">Sauvegarder</button>
+            </div>            
         </div>
         
         <script src="scripts.js"></script>
