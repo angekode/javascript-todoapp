@@ -226,6 +226,7 @@ function updateDomList() {
         let currentId = id; 
 
         const newLiElement = document.createElement("li");
+        newLiElement.setAttribute("class","task-row");
         listElement.appendChild(newLiElement);
         
         const newCheckboxElement = document.createElement("input");
