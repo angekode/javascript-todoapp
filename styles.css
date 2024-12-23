@@ -207,3 +207,13 @@ input[type="file"]:hover ~ #custom_button_load {
     width: calc(var(--load-button-width) - 2 * var(--button-padding-left-right));
     text-align: center;
 }
+
+/* Zone de messages */
+/* ---------------- */
+p.message-log {
+    font-size: smaller;
+    font-style: italic;
+    color: grey;
+    margin: 0px;
+    padding: 0px;
+}

@@ -47,6 +47,7 @@ window.addEventListener("load",() => {
         });
     }
 
+    // Clic sur le bouton "Charger"
     const fileInput = document.getElementById("file_input");
     if (fileInput == null) {
         console.log("Bouton de chargement de fichier manquant");
@@ -64,11 +65,13 @@ window.addEventListener("load",() => {
                     }
                     tasksList = loadedTasksObject;
                     updateDomList();
+                    displayMessageOnApp(tasksList.length + " tâches chargées");
                 };
             }
         });
     }
 
+    // Clic sur le bouton "Sauvegarder"
     const buttonSave = document.getElementById("button_save");
     if (buttonSave == null) {
         console.log("Bouton de sauvegarde manquant");
@@ -79,6 +82,7 @@ window.addEventListener("load",() => {
             a.href = URL.createObjectURL(data);
             a.download = "todo.json";
             a.click();
+            displayMessageOnApp(tasksList.length + " tâches sauvegardées");
             URL.revokeObjectURL(a.href);
         });
     }
@@ -164,6 +168,7 @@ function newTask(text,checked) {
 function saveTasksList() {
     try {
         localStorage.setItem("tasksList",JSON.stringify(tasksList));
+        displayMessageOnApp("Tâches sauvegardées dans le local storage");
     } catch (err) {
         console.log("saveTasksList(): impossible d'utiliser le localStorage");
     }
@@ -181,6 +186,7 @@ function loadTasksList() {
         return;
     }
     tasksList = loadedTasksObject;
+    displayMessageOnApp("Tâches chargées à partir du local storage");
 }
 
 function addTaskFromUserInput() {
@@ -191,7 +197,7 @@ function addTaskFromUserInput() {
     }
 
     tasksList.push(newTask(userInput.value,false));
-    updateDomList();    
+    updateDomList();
 }
 
 function removeTask(taskId) {
@@ -273,4 +279,17 @@ function updateDomList() {
     });
 
     saveTasksList();
+}
+
+function displayMessageOnApp(message) {
+    const logListElement = document.getElementById("message_log_list");
+    if (logListElement == null) {
+        console.log("printLog(): liste des message manquante");
+        return;
+    }
+    const newMessageElement = document.createElement("p");
+    newMessageElement.setAttribute("class","message-log");
+    newMessageElement.innerText = message;
+    logListElement.appendChild(newMessageElement);
+    setTimeout(() => newMessageElement.remove(),3000);
 }
